@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5433/henrys</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">abcd1234</property>
+    <mapping resource="Modelo/Insumos.hbm.xml"/>
+    <mapping resource="Modelo/Estaciones.hbm.xml"/>
+    <mapping resource="Modelo/CategoriaProductos.hbm.xml"/>
+    <mapping resource="Modelo/ProductosPedido.hbm.xml"/>
+    <mapping resource="Modelo/ProductosEstaciones.hbm.xml"/>
+    <mapping resource="Modelo/CategoriaPedidos.hbm.xml"/>
+    <mapping resource="Modelo/Productos.hbm.xml"/>
+    <mapping resource="Modelo/Pedidos.hbm.xml"/>
+    <mapping resource="Modelo/ProductosInsumos.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/07/2018 09:07:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.ProductosPedido" table="productos_pedido" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="Modelo.ProductosPedidoId">
+            <key-property name="idProducto" type="int">
+                <column name="id_producto" />
+            </key-property>
+            <key-property name="idPedido" type="int">
+                <column name="id_pedido" />
+            </key-property>
+            <key-property name="cantidad" type="int">
+                <column name="cantidad" />
+            </key-property>
+            <key-property name="precioXCantidad" type="int">
+                <column name="precio_x_cantidad" />
+            </key-property>
+            <key-property name="observaciones" type="string">
+                <column name="observaciones" />
+            </key-property>
+            <key-property name="estacionesOk" type="int">
+                <column name="estaciones_ok" />
+            </key-property>
+            <key-property name="estacionesTotales" type="int">
+                <column name="estaciones_totales" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="pedidos" class="Modelo.Pedidos" update="false" insert="false" fetch="select">
+            <column name="id_pedido" not-null="true" />
+        </many-to-one>
+        <many-to-one name="productos" class="Modelo.Productos" update="false" insert="false" fetch="select">
+            <column name="id_producto" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

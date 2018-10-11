@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/07/2018 09:07:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.Pedidos" table="pedidos" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="categoriaPedidos" class="Modelo.CategoriaPedidos" fetch="select">
+            <column name="id_categoria_pedidos" not-null="true" />
+        </many-to-one>
+        <property name="precioTotal" type="int">
+            <column name="precio_total" not-null="true" />
+        </property>
+        <property name="nombreCliente" type="string">
+            <column name="nombre_cliente" />
+        </property>
+        <property name="telefonoCliente" type="string">
+            <column name="telefono_cliente" />
+        </property>
+        <property name="mesa" type="java.lang.Integer">
+            <column name="mesa" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" />
+        </property>
+        <property name="fechaPedido" type="date">
+            <column name="fecha_pedido" length="13" />
+        </property>
+        <property name="horaInicio" type="time">
+            <column name="hora_inicio" length="15" />
+        </property>
+        <property name="horaEntrega" type="time">
+            <column name="hora_entrega" length="15" />
+        </property>
+        <set name="productosPedidos" table="productos_pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_pedido" not-null="true" />
+            </key>
+            <one-to-many class="Modelo.ProductosPedido" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/07/2018 09:07:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.ProductosInsumos" table="productos_insumos" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="Modelo.ProductosInsumosId">
+            <key-property name="idProducto" type="int">
+                <column name="id_producto" />
+            </key-property>
+            <key-property name="idInsumos" type="int">
+                <column name="id_insumos" />
+            </key-property>
+            <key-property name="cantidad" type="float">
+                <column name="cantidad" precision="8" scale="8" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="insumos" class="Modelo.Insumos" update="false" insert="false" fetch="select">
+            <column name="id_insumos" not-null="true" />
+        </many-to-one>
+        <many-to-one name="productos" class="Modelo.Productos" update="false" insert="false" fetch="select">
+            <column name="id_producto" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

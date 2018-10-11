@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25/07/2018 09:07:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Modelo.Insumos" table="insumos" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" not-null="true" />
+        </property>
+        <property name="unidadDeMedida" type="string">
+            <column name="unidad_de_medida" not-null="true" />
+        </property>
+        <property name="cantidadActual" type="float">
+            <column name="cantidad_actual" precision="8" scale="8" not-null="true" />
+        </property>
+        <set name="productosInsumoses" table="productos_insumos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_insumos" not-null="true" />
+            </key>
+            <one-to-many class="Modelo.ProductosInsumos" />
+        </set>
+    </class>
+</hibernate-mapping>
