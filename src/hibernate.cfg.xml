@@ -4,9 +4,9 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5433/henrys</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/BD_Food</property>
     <property name="hibernate.connection.username">postgres</property>
-    <property name="hibernate.connection.password">abcd1234</property>
+    <property name="hibernate.connection.password">root</property>
     <mapping resource="Modelo/Insumos.hbm.xml"/>
     <mapping resource="Modelo/Estaciones.hbm.xml"/>
     <mapping resource="Modelo/CategoriaProductos.hbm.xml"/>
