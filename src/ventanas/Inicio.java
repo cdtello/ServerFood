@@ -9,6 +9,7 @@ package ventanas;
 import Controlador.Operaciones;
 import Modelo.CategoriaPedidos;
 import Modelo.CategoriaProductos; 
+import Modelo.Pagos;
 import Modelo.Pedidos;
 import Modelo.Productos;
 import Modelo.ProductosEstacionesId;
@@ -26,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -209,6 +211,47 @@ public class Inicio extends javax.swing.JFrame {
         mat,
                 new String[]{
                 "Nombre||Mesa","Precio Total","Hora Inicio","Estado"
+                }
+        ));     
+    }
+    //********************************************************************************
+    //*************************LLENAR TABLA PAGOS********************************
+    public void llenar_tabla_pagos(List<Pagos> listica){
+        
+        List<Pagos> listaPagos = listica;
+        Iterator<Pagos> iter = listaPagos.iterator();
+        
+        String mat[][] = new String[listaPagos.size()][5];
+        for(int i = 0; i < listaPagos.size();i++)
+        {      
+            Locale locale = new Locale("es","CO");
+            NumberFormat nf = DecimalFormat.getCurrencyInstance(locale);
+            
+            int precio = listaPagos.get(i).getValor();
+            String precioFinal = nf.format(precio).substring(0,nf.format(precio).length()-3);
+            
+            mat[i][0] = listaPagos.get(i).getNombre();
+            mat[i][1] = String.valueOf(listaPagos.get(i).getIdentificacion());
+            mat[i][2] = String.valueOf(listaPagos.get(i).getObservacion());
+            mat[i][3] = precioFinal;
+            mat[i][4] = String.valueOf(listaPagos.get(i).getFecha());
+
+        }
+        tablaPagos.setModel(new javax.swing.table.DefaultTableModel(
+        mat,
+                new String[]{
+                "Nombre","Identificacion","Observacion","Valor","Fecha"
+                }
+        ));     
+    }
+    public void Limpiar_tabla_pagos()
+    { 
+        ArrayList<Pagos> listaPagos = new ArrayList();
+        String mat[][] = new String[listaPagos.size()][5];
+        tablaPagos.setModel(new javax.swing.table.DefaultTableModel(
+        mat,
+                new String[]{
+                "Nombre","Identificacion","Observacion","Valor","Fecha"
                 }
         ));     
     }
@@ -426,7 +469,7 @@ public class Inicio extends javax.swing.JFrame {
         domAsignado = new javax.swing.JButton();
         pEntregados = new javax.swing.JButton();
         btnProductos = new javax.swing.JButton();
-        btnInventario = new javax.swing.JButton();
+        btnPagos = new javax.swing.JButton();
         paneRealizarPedidos = new javax.swing.JPanel();
         btnGenerarPedido = new javax.swing.JButton();
         comboCatAgregar = new javax.swing.JComboBox();
@@ -514,22 +557,21 @@ public class Inicio extends javax.swing.JFrame {
         panelPagos = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        pagosNombre = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        pagosIdentificacion = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
+        pagosValor = new javax.swing.JTextField();
+        btnRegistrarPago = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        fechaInicio = new com.toedter.calendar.JDateChooser();
+        fechaFin = new com.toedter.calendar.JDateChooser();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
-        jButton7 = new javax.swing.JButton();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        tablaPagos = new javax.swing.JTable();
+        btnConsultarPago = new javax.swing.JButton();
+        pagosObservaciones = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
@@ -664,18 +706,18 @@ public class Inicio extends javax.swing.JFrame {
         });
         getContentPane().add(btnProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 190, -1));
 
-        btnInventario.setBackground(new java.awt.Color(153, 153, 153));
-        btnInventario.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        btnInventario.setForeground(new java.awt.Color(0, 0, 0));
-        btnInventario.setText("Pagos");
-        btnInventario.addActionListener(new java.awt.event.ActionListener() {
+        btnPagos.setBackground(new java.awt.Color(153, 153, 153));
+        btnPagos.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        btnPagos.setForeground(new java.awt.Color(0, 0, 0));
+        btnPagos.setText("Pagos");
+        btnPagos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInventarioActionPerformed(evt);
+                btnPagosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, 190, -1));
+        getContentPane().add(btnPagos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, 190, -1));
 
-        paneRealizarPedidos.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        paneRealizarPedidos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         btnGenerarPedido.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGenerarPedido.setText("Realizar Pedido");
@@ -966,7 +1008,7 @@ public class Inicio extends javax.swing.JFrame {
 
         getContentPane().add(paneRealizarPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
-        panelPedidosPendientes.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        panelPedidosPendientes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         tablaPedidosPendientes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tablaPedidosPendientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -1028,7 +1070,7 @@ public class Inicio extends javax.swing.JFrame {
 
         getContentPane().add(panelPedidosPendientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
-        panelDomiciliosPendientes.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        panelDomiciliosPendientes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -1101,7 +1143,7 @@ public class Inicio extends javax.swing.JFrame {
 
         getContentPane().add(panelDomiciliosPendientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
-        panelDomiciliosAsignados.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        panelDomiciliosAsignados.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -1165,7 +1207,7 @@ public class Inicio extends javax.swing.JFrame {
 
         getContentPane().add(panelDomiciliosAsignados, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
-        panelPedidosEntregados.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        panelPedidosEntregados.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -1223,7 +1265,7 @@ public class Inicio extends javax.swing.JFrame {
 
         getContentPane().add(panelPedidosEntregados, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
-        panelProductos.setBorder(new javax.swing.border.SoftBevelBorder(1));
+        panelProductos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -1484,7 +1526,7 @@ public class Inicio extends javax.swing.JFrame {
         getContentPane().add(panelProductos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
 
         panelPagos.setBackground(new java.awt.Color(102, 102, 102));
-        panelPagos.setBorder(new javax.swing.border.SoftBevelBorder(0));
+        panelPagos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -1506,8 +1548,13 @@ public class Inicio extends javax.swing.JFrame {
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Valor:");
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton6.setText("Registrar");
+        btnRegistrarPago.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRegistrarPago.setText("Registrar");
+        btnRegistrarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarPagoActionPerformed(evt);
+            }
+        });
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
@@ -1517,30 +1564,29 @@ public class Inicio extends javax.swing.JFrame {
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("Hasta:");
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        tablaPagos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Identificacion", "Descripcion", "Valor"
+                "Nombre", "Identificacion", "Observacion", "Valor", "Fecha"
             }
         ));
-        jScrollPane7.setViewportView(jTable5);
+        jScrollPane7.setViewportView(tablaPagos);
 
-        jButton7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton7.setText("Consultar");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnConsultarPago.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnConsultarPago.setText("Consultar");
+        btnConsultarPago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnConsultarPagoActionPerformed(evt);
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane8.setViewportView(jTextArea1);
+        pagosObservaciones.setColumns(20);
+        pagosObservaciones.setRows(5);
 
         javax.swing.GroupLayout panelPagosLayout = new javax.swing.GroupLayout(panelPagos);
         panelPagos.setLayout(panelPagosLayout);
@@ -1555,39 +1601,42 @@ public class Inicio extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 898, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPagosLayout.createSequentialGroup()
+                            .addGroup(panelPagosLayout.createSequentialGroup()
                                 .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13)
                                     .addComponent(jLabel18))
                                 .addGap(18, 18, 18)
                                 .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                    .addComponent(pagosNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(panelPagosLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel14)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(pagosIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(panelPagosLayout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
                                         .addComponent(jLabel19)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(fechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(panelPagosLayout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnConsultarPago)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnRegistrarPago)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(pagosObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelPagosLayout.createSequentialGroup()
+                                        .addGap(9, 9, 9)
                                         .addComponent(jLabel16)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel15))
-                                    .addGroup(panelPagosLayout.createSequentialGroup()
-                                        .addComponent(jButton7)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton6)))
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                                        .addComponent(pagosValor, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel15)
+                                        .addGap(69, 69, 69)))))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         panelPagosLayout.setVerticalGroup(
             panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1597,34 +1646,31 @@ public class Inicio extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPagosLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelPagosLayout.createSequentialGroup()
-                                .addGap(0, 55, Short.MAX_VALUE)
-                                .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton7)
-                                        .addComponent(jButton6))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel18)
-                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel19))))
-                            .addGroup(panelPagosLayout.createSequentialGroup()
-                                .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel16)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel15))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel18)
+                                .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel19)
+                                .addComponent(fechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnConsultarPago)
+                                .addComponent(btnRegistrarPago))))
                     .addGroup(panelPagosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(pagosNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14)
+                            .addComponent(pagosIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16)
+                            .addComponent(pagosValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pagosObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
         getContentPane().add(panelPagos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 940, 420));
@@ -1661,6 +1707,8 @@ public class Inicio extends javax.swing.JFrame {
         ocultarPaneles();
         paneRealizarPedidos.setVisible(true);
         cantidadAgregar.setText("1");
+        observacionesAgregar.setLineWrap(true);
+        observacionesAgregar.setWrapStyleWord(true);
     }//GEN-LAST:event_realizarPedidosActionPerformed
 
     private void pPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pPendientesActionPerformed
@@ -1674,10 +1722,12 @@ public class Inicio extends javax.swing.JFrame {
         panelDomiciliosAsignados.setVisible(true);        
     }//GEN-LAST:event_domAsignadoActionPerformed
 
-    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+    private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
         ocultarPaneles();
-        panelPagos.setVisible(true);        
-    }//GEN-LAST:event_btnInventarioActionPerformed
+        panelPagos.setVisible(true);    
+        pagosObservaciones.setLineWrap(true);
+        pagosObservaciones.setWrapStyleWord(true);
+    }//GEN-LAST:event_btnPagosActionPerformed
 
     private void btnGenerarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPedidoActionPerformed
 
@@ -2039,9 +2089,56 @@ public class Inicio extends javax.swing.JFrame {
         limpiarCamposAdminProductos();
     }//GEN-LAST:event_btnEliminarProdActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    private void btnConsultarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarPagoActionPerformed
+        String nombre = pagosNombre.getText();
+        String identificacion = pagosIdentificacion.getText();
+        Date fechaInicio = this.fechaInicio.getDate();
+        Date fechaFin = this.fechaFin.getDate();
+        
+        if(nombre.compareTo("") != 0)
+        {
+            llenar_tabla_pagos(operaciones.consultarPagoPorNombre(nombre));
+            System.out.println("Consulta por Nombre");
+        }
+        else if(identificacion.compareTo("") != 0)
+        {
+            llenar_tabla_pagos(operaciones.consultarPagoPorIdentificacion(Integer.parseInt(identificacion)));
+            System.out.println("Consulta por Identificacion");
+        }
+        else if((fechaInicio == null) || (fechaFin == null))
+        {
+         System.out.println("Seleccione una opcion");
+        }
+        else
+        {
+            System.out.println("Fecha Inicio: "+fechaInicio+"  Fecha Fin: "+fechaFin);
+            llenar_tabla_pagos(operaciones.consultarPagoPorFecha(fechaInicio, fechaFin));
+            System.out.println("Consulta por Fecha");
+        }
+        pagosNombre.setText("");
+        pagosIdentificacion.setText("");
+        this.fechaInicio.setDate(null);
+        this.fechaFin.setDate(null);
+        
+        
+    }//GEN-LAST:event_btnConsultarPagoActionPerformed
+
+    private void btnRegistrarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPagoActionPerformed
+        Pagos pago;
+        pago = new Pagos();
+        
+        int identificacion  = Integer.parseInt(pagosIdentificacion.getText());
+        String nombre = pagosNombre.getText();
+        int valor = Integer.parseInt(pagosValor.getText());
+        String observaciones = pagosObservaciones.getText();
+        
+        pago.setIdentificacion(identificacion);
+        pago.setNombre(nombre);
+        pago.setObservacion(observaciones);
+        pago.setValor(valor);
+        
+        operaciones.insertarPago(pago);
+    }//GEN-LAST:event_btnRegistrarPagoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2087,15 +2184,17 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarCat;
     private javax.swing.JButton btnAgregarMostrar;
     private javax.swing.JButton btnAgregarProd;
+    private javax.swing.JButton btnConsultarPago;
     private javax.swing.JButton btnConsultarProd;
     private javax.swing.JButton btnEliminarCat;
     private javax.swing.JButton btnEliminarMostrar;
     private javax.swing.JButton btnEliminarProd;
     private javax.swing.JButton btnFinalizarPendiente;
     private javax.swing.JButton btnGenerarPedido;
-    private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnModificarProd;
+    private javax.swing.JButton btnPagos;
     private javax.swing.JButton btnProductos;
+    private javax.swing.JButton btnRegistrarPago;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnVerPendiente;
     private javax.swing.JTextField cantidadAgregar;
@@ -2117,6 +2216,8 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JLabel estadoP3;
     private javax.swing.JLabel estadoP4;
     private javax.swing.JLabel estadoP5;
+    private com.toedter.calendar.JDateChooser fechaFin;
+    private com.toedter.calendar.JDateChooser fechaInicio;
     private javax.swing.JLabel fondo;
     private javax.swing.JTextField idProd;
     private javax.swing.JButton jButton1;
@@ -2124,8 +2225,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -2135,8 +2234,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
     private javax.swing.JCheckBox jCheckBox9;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -2173,14 +2270,8 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel labelAdministracionProductos;
     private javax.swing.JLabel labelPara;
     private javax.swing.JTextField mesa_nombre;
@@ -2189,6 +2280,10 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JTextArea observacionesAgregar;
     private javax.swing.JButton pEntregados;
     private javax.swing.JButton pPendientes;
+    private javax.swing.JTextField pagosIdentificacion;
+    private javax.swing.JTextField pagosNombre;
+    private javax.swing.JTextArea pagosObservaciones;
+    private javax.swing.JTextField pagosValor;
     private javax.swing.JPanel paneRealizarPedidos;
     private javax.swing.JPanel panelDomiciliosAsignados;
     private javax.swing.JPanel panelDomiciliosPendientes;
@@ -2199,6 +2294,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JTextField precioProducto;
     private javax.swing.JButton realizarPedidos;
     private javax.swing.JTable tablaDomiciliosPendientes;
+    private javax.swing.JTable tablaPagos;
     private javax.swing.JTable tablaPedidosEntregados;
     private javax.swing.JTable tablaPedidosPendientes;
     private javax.swing.JTable tablaProductos;

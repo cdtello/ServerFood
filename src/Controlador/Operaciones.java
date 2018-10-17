@@ -11,6 +11,7 @@ package Controlador;
  */
 import Modelo.*;
 import ServerFood.EstacionesOKvsTotales;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -439,6 +440,72 @@ public class Operaciones {
         Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,telefono_cliente,direccion,mesa,precio_total,hora_inicio,estado from pedidos where estado = 1 order by id desc");
         query.setResultTransformer(Transformers.aliasToBean(Pedidos.class));
         List<Pedidos> lista = query.list();
+        tx.commit();
+        session.close();
+        return lista;
+    }
+    public void insertarPago(Pagos pago)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session;
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        
+        int identificacion = pago.getIdentificacion();
+        String nombre = pago.getNombre().toUpperCase();
+        String observacion = pago.getObservacion();
+        int valor = pago.getValor();
+        
+        
+        Query query = session.createSQLQuery("insert into pagos(identificacion,nombre,observacion,valor,fecha)\n" +
+                "values"
+                + "("+identificacion+",'"+nombre+"','"+observacion+"',"+valor+",now())");
+        
+        query.executeUpdate();
+        
+        tx.commit();
+        session.close();
+        JOptionPane.showMessageDialog(null, "Pago Registrado Correctamente");
+    }
+    public List<Pagos> consultarPagoPorNombre(String nombre)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session;
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query query = session.createSQLQuery("select id,identificacion,nombre,observacion,valor,fecha from pagos where nombre like '%"+nombre.toUpperCase()+"%'");
+        query.setResultTransformer(Transformers.aliasToBean(Pagos.class));
+        List<Pagos> lista = query.list();
+        tx.commit();
+        session.close();
+        return lista;
+    }
+    public List<Pagos> consultarPagoPorIdentificacion(int identificacion)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session;
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query query = session.createSQLQuery("select id,identificacion,nombre,observacion,valor,fecha from pagos where identificacion = "+identificacion);
+        query.setResultTransformer(Transformers.aliasToBean(Pagos.class));
+        List<Pagos> lista = query.list();
+        tx.commit();
+        session.close(); 
+        return lista;
+    }
+    public List<Pagos> consultarPagoPorFecha(Date fechaInicio, Date fechaFin)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session;
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query query = session.createSQLQuery("select id,identificacion,nombre,observacion,valor,fecha from pagos where fecha BETWEEN CAST ('"+fechaInicio+"' AS DATE) \n" +
+        "AND CAST ('"+fechaFin+"' AS DATE)");
+        query.setResultTransformer(Transformers.aliasToBean(Pagos.class));
+        List<Pagos> lista = query.list();
         tx.commit();
         session.close();
         return lista;

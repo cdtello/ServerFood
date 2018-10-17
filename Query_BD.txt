@@ -96,3 +96,13 @@ insert into CATEGORIA_PEDIDOS(id,nombre)values
 
 insert into pedidos(id_categoria_pedidos,precio_total,nombre_cliente,telefono_cliente,mesa,direccion,fecha_pedido,hora_inicio,hora_entrega)values
 (precio_total,'nombre_cliente','telefono_cliente',mesa,'direccion',now(),now())
+
+
+*************CREACION TABLA PAGOS****************
+CREATE TABLE PAGOS(
+   ID SERIAL PRIMARY KEY,
+   IDENTIFICACION INT ,
+   NOMBRE         TEXT      NOT NULL,
+   OBSERVACION	  TEXT	    NOT NULL,
+   VALOR INT NOT NULL,
+   FECHA DATE NOT NULL )
