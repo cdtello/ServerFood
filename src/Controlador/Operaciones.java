@@ -11,7 +11,9 @@ package Controlador;
  */
 import Modelo.*;
 import ServerFood.EstacionesOKvsTotales;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -409,7 +411,9 @@ public class Operaciones {
         session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,mesa,precio_total,hora_inicio,estado from pedidos where estado = 0 order by id desc");
+        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,mesa,precio_total,hora_inicio,estado "
+                + "from pedidos where estado = 0 "
+                + cadenaConsultaAlDia());
         query.setResultTransformer(Transformers.aliasToBean(Pedidos.class));
         List<Pedidos> lista = query.list();
         tx.commit();
@@ -417,18 +421,35 @@ public class Operaciones {
         return lista;
     }
     public List<Pedidos> consultarPedidosEntregados()
-    {
+    {   
         SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
         Session session;
         session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,mesa,precio_total,hora_inicio,estado from pedidos where estado = 3 order by id desc");
+        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,mesa,precio_total,hora_entrega,estado\n "
+                + "from pedidos where estado = 3 "
+                + cadenaConsultaAlDia());
         query.setResultTransformer(Transformers.aliasToBean(Pedidos.class));
         List<Pedidos> lista = query.list();
         tx.commit();
         session.close();
+        
+        
         return lista;
+    }
+    public String cadenaConsultaAlDia()
+    {
+        Calendar fecha = Calendar.getInstance();
+        int ano = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH) + 1;
+        int dia = fecha.get(Calendar.DATE);
+        String cadena = "";
+        cadena = "and\n" 
+                + "fecha_pedido between '2018-10-11 15:00:00' and '2018-10-12 04:00:00'\n" 
+                + "order by id desc";
+        System.out.println("Date actual: "+ano+':'+mes+':'+dia);
+        return cadena;
     }
     public List<Pedidos> consultarDomiciliosPendientes()
     {

@@ -21,7 +21,7 @@ public class Pedidos  implements java.io.Serializable {
      private String direccion;
      private Date fechaPedido;
      private Date hora_inicio;
-     private Date horaEntrega;
+     private Date hora_entrega;
      private Set productosPedidos = new HashSet(0);
      private int estado;
      private int id_categoria_pedidos;
@@ -62,7 +62,7 @@ public class Pedidos  implements java.io.Serializable {
        this.direccion = direccion;
        this.fechaPedido = fechaPedido;
        this.hora_inicio = horaInicio;
-       this.horaEntrega = horaEntrega;
+       this.hora_entrega = horaEntrega;
        this.productosPedidos = productosPedidos;
     }
    
@@ -130,11 +130,11 @@ public class Pedidos  implements java.io.Serializable {
         this.hora_inicio = horaInicio;
     }
     public Date getHoraEntrega() {
-        return this.horaEntrega;
+        return this.hora_entrega;
     }
     
     public void setHoraEntrega(Date horaEntrega) {
-        this.horaEntrega = horaEntrega;
+        this.hora_entrega = horaEntrega;
     }
     public Set getProductosPedidos() {
         return this.productosPedidos;

@@ -283,14 +283,14 @@ public class Inicio extends javax.swing.JFrame {
             
             mat[i][1] = precioFinal;
             
-            mat[i][2] = String.valueOf(listaPedidosEntregados.get(i).getHoraInicio());
+            mat[i][2] = String.valueOf(listaPedidosEntregados.get(i).getHoraEntrega());
             
 
         }
         tablaPedidosEntregados.setModel(new javax.swing.table.DefaultTableModel(
         mat,
                 new String[]{
-                "Nombre||Mesa","Precio Total","Hora Inicio","Estado"
+                "Nombre||Mesa","Precio Total","Hora Entrega","Estado"
                 }
         ));     
     }
@@ -577,7 +577,6 @@ public class Inicio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(getIconImage());
-        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSalir.setBackground(new java.awt.Color(153, 153, 153));
@@ -1636,14 +1635,13 @@ public class Inicio extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel15)
                                         .addGap(69, 69, 69)))))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         panelPagosLayout.setVerticalGroup(
             panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPagosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel12)
-                .addGap(18, 18, 18)
                 .addGroup(panelPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPagosLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -1668,7 +1666,6 @@ public class Inicio extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pagosObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
