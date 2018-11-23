@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -274,6 +275,11 @@ public class Inicio extends javax.swing.JFrame {
                 mat[i][0] = String.valueOf(listaPedidosEntregados.get(i).getNombreCliente());
             }
             
+            else if(listaPedidosEntregados.get(i).getId_categoria_pedidos() == 3)
+            {
+                mat[i][0] = String.valueOf(listaPedidosEntregados.get(i).getNombreCliente())+" - "
+                           +String.valueOf(listaPedidosEntregados.get(i).getDireccion());
+            }
             
             Locale locale = new Locale("es","CO");
             NumberFormat nf = DecimalFormat.getCurrencyInstance(locale);
@@ -1029,6 +1035,11 @@ public class Inicio extends javax.swing.JFrame {
 
         btnFinalizarPendiente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnFinalizarPendiente.setText("Finalizar Pedido");
+        btnFinalizarPendiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarPendienteActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -1732,53 +1743,71 @@ public class Inicio extends javax.swing.JFrame {
         pedido = new Pedidos();
         
         int seleccion = comboCatPedido.getSelectedIndex();
-        if (seleccion == 1)
+        
+        if(mesa_nombre.getText().compareTo("") == 0)
         {
-            int mesa = Integer.parseInt(mesa_nombre.getText());    
-            pedido.setMesa(mesa);
-            pedido.setNombreCliente("");
+            JOptionPane.showMessageDialog(null, "Complete Todos los Campos");
         }
-        else if(seleccion == 2)
+        else if(seleccion == 0)
         {
-            String nombre_cliente = mesa_nombre.getText();         
-            pedido.setNombreCliente(nombre_cliente);
-            pedido.setMesa(0);
+            JOptionPane.showMessageDialog(null, "Seleccione Tipo de pedido : LLEVAR o MESA");
         }
-        int valor_total = Integer.parseInt(totalPagar.getText().replace(".","").replace("$", ""));
-        pedido.setPrecioTotal(valor_total);
-        
-        pedido.setCategoriaPedidos(operaciones.consultarCategoriaXNombrePedido(comboCatPedido.getSelectedItem().toString()));
-        pedido.setEstado(0);
-        
-        operaciones.insertarPedido(pedido);
-        int id_pedido = operaciones.consultarIdUltimoPedidoRealizado();
-        
-        for(int i=0; i<productosTransmision.size() ; i++)
+        else if(productosTransmision.size() == 0)
         {
-            productosTransmision.get(i).setId_pedido(id_pedido);
-            
-            int idProducto = productosTransmision.get(i).getId_producto();
-            int idPedido = productosTransmision.get(i).getId_pedido();
-            int cantidad = productosTransmision.get(i).getCantidad();
-            int precio = productosTransmision.get(i).getPrecio();
-            String observaciones = productosTransmision.get(i).getObservacion();
-            int estacionesTotales = operaciones.consultarEstacionesXProducto(operaciones.consultarProducto(idProducto)).size();
-            
-            operaciones.insertarProductosPedido(idProducto, idPedido, cantidad, precio*cantidad, observaciones, 0, estacionesTotales);
+            JOptionPane.showMessageDialog(null, "Agregue productos al Pedido");
         }
-        administrador.enviarPedidoRealizado(productosTransmision);
         
-        comboCatPedido.setSelectedIndex(0);
-        labelPara.setText("¿?");
-        mesa_nombre.setText("");
-        Limpiar_tabla_productos();
-        productosTransmision = new ArrayList<>();
+        else
+        {
+            if (seleccion == 1)
+                {
+                    int mesa = Integer.parseInt(mesa_nombre.getText());    
+                    pedido.setMesa(mesa);
+                    pedido.setNombreCliente("");
+                }
+            else if(seleccion == 2)
+                {
+                    String nombre_cliente = mesa_nombre.getText();         
+                    pedido.setNombreCliente(nombre_cliente);
+                    pedido.setMesa(0);
+                }
+                int valor_total = Integer.parseInt(totalPagar.getText().replace(".","").replace("$", ""));
+                pedido.setPrecioTotal(valor_total);
+        
+                pedido.setCategoriaPedidos(operaciones.consultarCategoriaXNombrePedido(comboCatPedido.getSelectedItem().toString()));
+                pedido.setEstado(0);
+        
+                operaciones.insertarPedido(pedido);
+                int id_pedido = operaciones.consultarIdUltimoPedidoRealizado();
+        
+                for(int i=0; i<productosTransmision.size() ; i++)
+                {
+                    productosTransmision.get(i).setId_pedido(id_pedido);
+                        
+                    int idProducto = productosTransmision.get(i).getId_producto();
+                    int idPedido = productosTransmision.get(i).getId_pedido();
+                    int cantidad = productosTransmision.get(i).getCantidad();
+                    int precio = productosTransmision.get(i).getPrecio();
+                    String observaciones = productosTransmision.get(i).getObservacion();
+                    int estacionesTotales = operaciones.consultarEstacionesXProducto(operaciones.consultarProducto(idProducto)).size();
+                        
+                    operaciones.insertarProductosPedido(idProducto, idPedido, cantidad, precio*cantidad, observaciones, 0, estacionesTotales);
+                }
+                administrador.enviarPedidoRealizado(productosTransmision);
+        
+                comboCatPedido.setSelectedIndex(0);
+                labelPara.setText("¿?");
+                mesa_nombre.setText("");
+                Limpiar_tabla_productos();
+                productosTransmision = new ArrayList<>();
+        }
+        
         
     }//GEN-LAST:event_btnGenerarPedidoActionPerformed
 
     private void domPendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_domPendienteActionPerformed
         ocultarPaneles();
-        //llenar_combo_categorias();
+        llenar_tabla_domicilios_pendientes();
         panelDomiciliosPendientes.setVisible(true);
     }//GEN-LAST:event_domPendienteActionPerformed
 
@@ -1945,31 +1974,42 @@ public class Inicio extends javax.swing.JFrame {
 
     private void btnAgregarMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMostrarActionPerformed
         
-        
-        String categoria = comboCatAgregar.getSelectedItem().toString();
-        String producto = comboProAgregar.getSelectedItem().toString();
-        int cantidad = Integer.parseInt(cantidadAgregar.getText());
-        
-        String observaciones = observacionesAgregar.getText();
-        
-        ProductoTransmision productoTransmision = new ProductoTransmision();
-        productoTransmision.setId_producto(operaciones.consultarProductoXNombre(producto).getId());
-        productoTransmision.setCantidad(cantidad);
-        productoTransmision.setObservacion(observaciones);
-        productoTransmision.setNombre_producto(producto);
-        productoTransmision.setPrecio(operaciones.consultarProductoXNombre(producto).getPrecio());
-        productoTransmision.setEntregarA(mesa_nombre.getText());
-        
-        //Falta meter id de pedido
-        List<ProductosEstacionesId> listaEstaciones = operaciones.consultarEstacionesXProducto(operaciones.consultarProductoXNombre(producto));
-        for(int i=0; i<listaEstaciones.size();i++)
+        if(comboCatAgregar.getSelectedIndex()== 0)
         {
-            productoTransmision.insertarDestino(listaEstaciones.get(i).getId_Estacion());
-            System.out.println("Se inserto la estacion: "+ listaEstaciones.get(i).getId_Estacion());
+            JOptionPane.showMessageDialog(null, "Seleccione Categoria");
         }
-        productosTransmision.add(productoTransmision);
-        llenar_tabla_productos();
-        limpiarCamposRealizarPedido();
+        else if(comboProAgregar.getSelectedIndex()== 0)
+        {
+            JOptionPane.showMessageDialog(null, "Seleccione Producto");
+        }
+        else
+        {
+            String categoria = comboCatAgregar.getSelectedItem().toString();
+            String producto = comboProAgregar.getSelectedItem().toString();
+            int cantidad = Integer.parseInt(cantidadAgregar.getText());
+        
+            String observaciones = observacionesAgregar.getText();
+        
+            ProductoTransmision productoTransmision = new ProductoTransmision();
+            productoTransmision.setId_producto(operaciones.consultarProductoXNombre(producto).getId());
+            productoTransmision.setCantidad(cantidad);
+            productoTransmision.setObservacion(observaciones);
+            productoTransmision.setNombre_producto(producto);
+            productoTransmision.setPrecio(operaciones.consultarProductoXNombre(producto).getPrecio());
+            productoTransmision.setEntregarA(mesa_nombre.getText());
+        
+            //Falta meter id de pedido
+            List<ProductosEstacionesId> listaEstaciones = operaciones.consultarEstacionesXProducto(operaciones.consultarProductoXNombre(producto));
+            for(int i=0; i<listaEstaciones.size();i++)
+            {
+                productoTransmision.insertarDestino(listaEstaciones.get(i).getId_Estacion());
+                System.out.println("Se inserto la estacion: "+ listaEstaciones.get(i).getId_Estacion());
+            }
+            productosTransmision.add(productoTransmision);
+            llenar_tabla_productos();
+            limpiarCamposRealizarPedido();
+        }
+        
     }//GEN-LAST:event_btnAgregarMostrarActionPerformed
     public void limpiarCamposRealizarPedido()
     {
@@ -2136,6 +2176,15 @@ public class Inicio extends javax.swing.JFrame {
         
         operaciones.insertarPago(pago);
     }//GEN-LAST:event_btnRegistrarPagoActionPerformed
+
+    private void btnFinalizarPendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarPendienteActionPerformed
+        int seleccionado = tablaPedidosPendientes.getSelectedRow();
+        List<Pedidos> listaPedidosPendientes = operaciones.consultarPedidosPendientes();
+        int id_pedido = listaPedidosPendientes.get(seleccionado).getId();
+        operaciones.finalizarPedido(id_pedido);
+        
+        llenar_tabla_pendientes();
+    }//GEN-LAST:event_btnFinalizarPendienteActionPerformed
 
     /**
      * @param args the command line arguments

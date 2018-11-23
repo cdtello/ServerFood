@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import ventanas.Inicio;
 
 /**
@@ -272,6 +273,7 @@ public class AdminAplicacion implements Runnable{
         {
             int destino = producto.getDestinos().get(i);
             System.out.println("Buscando estacion: "+destino);
+            int encontrado = 0;
             
             for(int j = 0; j<arregloHilos.size(); j++)
             {
@@ -280,7 +282,13 @@ public class AdminAplicacion implements Runnable{
                 {
                     System.out.println("Envio a la Estacion: "+arregloHilos.get(j).estacion.getId());
                     arregloHilos.get(j).enviarProducto(producto);
+                    encontrado = 1;
                 }
+            }
+            
+            if(encontrado == 0)
+            {
+                JOptionPane.showMessageDialog(null, "Estacion Destino Desconectada...");
             }
         }
     }

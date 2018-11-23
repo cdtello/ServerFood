@@ -9,6 +9,7 @@ package ServerFood;
 import Controlador.Operaciones;
 import Modelo.Pedidos;
 import Modelo.Productos;
+import Modelo.ProductosEstacionesId;
 import ServerFood.Estacion;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -160,6 +162,7 @@ public class AdministracionHilos extends Thread{
                             pedido.setMesa(0);
                             
                             op.insertarPedido(pedido);
+                            
                             int id_pedido = op.consultarIdUltimoPedidoRealizado();
         
                             for(int i=0; i<productosDomicilio.size() ; i++)
@@ -175,8 +178,16 @@ public class AdministracionHilos extends Thread{
                                 int estacionesTotales = op.consultarEstacionesXProducto(op.consultarProducto(idProducto)).size();
 
                                 op.insertarProductosPedido(idProducto, idPedido, cantidad, precio*cantidad, observaciones, 0, estacionesTotales);
+                                List<ProductosEstacionesId> listaEstaciones = op.consultarEstacionesXProducto(op.consultarProducto(idProducto));
+                                
+                                for(int j=0; j<listaEstaciones.size();j++)
+                                {
+                                    productosDomicilio.get(i).insertarDestino(listaEstaciones.get(j).getId_Estacion());
+                                    System.out.println("Se inserto la estacion: "+ listaEstaciones.get(j).getId_Estacion());
+                                }
                             }
                             server.enviarPedidoRealizado(productosDomicilio);
+                            JOptionPane.showMessageDialog(null, "se envio domicilio a la estacion correctamente");
                             server.ventanaPricipal.llenar_tabla_domicilios_pendientes();
                             
                         }else{

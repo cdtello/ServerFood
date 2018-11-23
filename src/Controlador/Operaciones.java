@@ -356,7 +356,7 @@ public class Operaciones {
         
         tx.commit();
         session.close();
-        JOptionPane.showMessageDialog(null, "Pedido Actualizado");
+        //JOptionPane.showMessageDialog(null, "Pedido Actualizado");
     }
     public void actualizarProductosPedido(int idProducto,int idPedido)
     {
@@ -383,7 +383,7 @@ public class Operaciones {
             EstacionesOKvsTotales estacionesOKvsTotales = iter.next();
             if(estacionesOKvsTotales.getEstaciones_ok() == estacionesOKvsTotales.getEstaciones_totales())
             {
-                System.out.println("producto finalizado");
+                System.out.println("producto finalizado****");
             }
             else{
                 System.out.println("producto Pendiente");
@@ -400,6 +400,21 @@ public class Operaciones {
         
         tx.commit();
         session.close();
+    }
+    public void finalizarPedido(int idPedido)
+    {
+        SessionFactory sessionFactory = NewHibernateUtil.getSessionFactory();
+        Session session;
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        
+        Query queryResultado = session.createSQLQuery("update pedidos set estado = 3 , hora_entrega = now() where id = "+idPedido);
+        queryResultado.executeUpdate();
+        
+        tx.commit();
+        session.close();
+        JOptionPane.showMessageDialog(null, "Pedido  Finalizado");
     }
     /***********
      * 
@@ -427,7 +442,7 @@ public class Operaciones {
         session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,mesa,precio_total,hora_entrega,estado\n "
+        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,direccion,mesa,precio_total,hora_entrega,estado\n "
                 + "from pedidos where estado = 3 "
                 + cadenaConsultaAlDia());
         query.setResultTransformer(Transformers.aliasToBean(Pedidos.class));
@@ -444,9 +459,10 @@ public class Operaciones {
         int ano = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH) + 1;
         int dia = fecha.get(Calendar.DATE);
+        int dia2 = dia + 1;
         String cadena = "";
         cadena = "and\n" 
-                + "fecha_pedido between '2018-10-11 15:00:00' and '2018-10-12 04:00:00'\n" 
+                + "fecha_pedido between '"+ano+"-"+mes+"-"+dia+" 12:00:00' and '"+ano+"-"+mes+"-"+dia2+" 04:00:00'\n" 
                 + "order by id desc";
         System.out.println("Date actual: "+ano+':'+mes+':'+dia);
         return cadena;
@@ -458,7 +474,8 @@ public class Operaciones {
         session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,telefono_cliente,direccion,mesa,precio_total,hora_inicio,estado from pedidos where estado = 1 order by id desc");
+        Query query = session.createSQLQuery("select id,id_categoria_pedidos,nombre_cliente,telefono_cliente,direccion,mesa,precio_total,hora_inicio,estado from pedidos where estado = 1 "
+                + cadenaConsultaAlDia());
         query.setResultTransformer(Transformers.aliasToBean(Pedidos.class));
         List<Pedidos> lista = query.list();
         tx.commit();
